@@ -17,7 +17,9 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Stop earlier containers 
-        run: docker stop $(docker ps -a -q)
+        run: |
+          chmod +x kill-older-container.sh
+          ./kill-older-container.sh
 
       - name: Docker build for the new container
         run: docker build -t java-springboot-be .
