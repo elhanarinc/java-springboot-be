@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pipeline:
+    runs-on: self-hosted
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:  
+      - name: Checkout repository
+        with:
+          fetch-depth: 2
+        uses: actions/checkout@v2
+      
+      - name: Stop earlier containers 
+        run: docker stop $(docker ps -a -q)
+
+      - name: Docker build for the new container
+        run: docker build -t java-springboot-be .
+
+      - name: Docker run for the new container
+        run: docker run -p 80:8080 --rm java-springboot-be:latest
+      
