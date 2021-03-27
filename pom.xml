@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.challenge</groupId>
-	<artifactId>dolap-be</artifactId>
+	<artifactId>java-springboot-be</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dolap-be</name>
-	<description>Backend Challenge for Dolap</description>
+	<name>java-springboot-be</name>
+	<description>Java SpringBoot Backend Challenge</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

@@ -1,4 +1,7 @@
-CREATE TABLE `item` (
+CREATE DATABASE IF NOT EXISTS item_db;
+use item_db;
+
+CREATE TABLE IF NOT EXISTS `item` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(180) NOT NULL,
     `category` varchar(180) NOT NULL,
