@@ -1,5 +1,6 @@
 package com.challenge.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +29,13 @@ public class ItemController {
     this.itemService = itemService;
   }
 
+  @GetMapping("/v1/healthcheck")
+  ResponseEntity<?> healthcheck() {
+    Map<String, String> body = new HashMap<>();
+    body.put("message", "OK");
+    return new ResponseEntity<>(body, HttpStatus.OK);
+  }
+
   @GetMapping("/v1/items")
   ResponseEntity<?> getAllItems(@RequestParam(value = "page", required = false) Optional<Integer> page,
                                 @RequestParam(value = "count", required = false) Optional<Integer> count,
@@ -48,20 +56,26 @@ public class ItemController {
   }
 
   @PostMapping("/v1/items")
-  ResponseEntity<Long> newItem(@Valid @RequestBody Item newItem) {
+  ResponseEntity<?> newItem(@Valid @RequestBody Item newItem) {
     Long newItemId = itemService.saveItem(newItem);
-    return new ResponseEntity<>(newItemId, HttpStatus.OK);
+    Map<String, String> body = new HashMap<>();
+    body.put("item_id", newItemId.toString());
+    return new ResponseEntity<>(body, HttpStatus.CREATED);
   }
 
   @PutMapping("/v1/items/{id}")
-  ResponseEntity<Long> replaceItem(@Valid @RequestBody Item newItem, @PathVariable Long id) {
+  ResponseEntity<?> replaceItem(@Valid @RequestBody Item newItem, @PathVariable Long id) {
     Long itemId = itemService.replaceItem(newItem, id);
-    return new ResponseEntity<>(itemId, HttpStatus.OK);
+    Map<String, String> body = new HashMap<>();
+    body.put("item_id", itemId.toString());
+    return new ResponseEntity<>(body, HttpStatus.OK);
   }
 
   @DeleteMapping("/v1/items/{id}")
-  ResponseEntity<Long> deleteItem(@PathVariable Long id) {
+  ResponseEntity<?> deleteItem(@PathVariable Long id) {
     Long itemId = itemService.deleteItem(id);
-    return new ResponseEntity<>(itemId, HttpStatus.OK);
+    Map<String, String> body = new HashMap<>();
+    body.put("item_id", itemId.toString());
+    return new ResponseEntity<>(body, HttpStatus.OK);
   }
 }
