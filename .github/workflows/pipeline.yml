@@ -25,5 +25,5 @@ jobs:
         run: docker build -t java-springboot-be .
 
       - name: Docker run for the new container
-        run: docker run -p 80:8080 --rm java-springboot-be:latest
+        run: docker run -p 80:8080 --rm java-springboot-be:latest -d
       
