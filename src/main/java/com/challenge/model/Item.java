@@ -42,7 +42,7 @@ public class Item {
 
   public Item(String name, String category, String description, String picture_url, Long price) {
     this.name = name;
-    this.category = category;
+    this.category = category.toLowerCase();
     this.description = description;
     this.picture_url = picture_url;
     this.price = price;
@@ -111,23 +111,6 @@ public class Item {
 
   public void setTs_update(Long ts_update) {
     this.ts_update = ts_update;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (!(o instanceof Item))
-      return false;
-    Item item = (Item) o;
-    return Objects.equals(this.id, item.id)
-            && Objects.equals(this.name, item.name)
-            && Objects.equals(this.category, item.category)
-            && Objects.equals(this.description, item.description)
-            && Objects.equals(this.picture_url, item.picture_url)
-            && Objects.equals(this.price, item.price)
-            && Objects.equals(this.ts_create, item.ts_create)
-            && Objects.equals(this.ts_update, item.ts_update);
   }
 
   @Override

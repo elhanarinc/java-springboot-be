@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
 @RestController
 public class ItemController {
@@ -33,7 +34,8 @@ public class ItemController {
 
   @GetMapping("/items")
   ResponseEntity<?> getAllItems(@RequestParam(value = "page", required = false) Optional<Integer> page,
-                                @RequestParam(value = "count", required = false) Optional<Integer> count) {
+                                @RequestParam(value = "count", required = false) Optional<Integer> count,
+                                @RequestParam(value = "category", required = false) Optional<String> itemCategory) {
     Integer limit = 10;
     Integer offset = 0;
 
@@ -44,7 +46,15 @@ public class ItemController {
       offset = page.get() * limit;
     }
 
-    List<Item> items = repository.findPaginatedItems(limit, offset);
+    List<Item> items = new ArrayList<Item>();
+
+    if (itemCategory.isPresent()) {
+      String category = itemCategory.get().toLowerCase();
+       items = repository.findPaginatedItemsWithCategory(limit, offset, category);
+    } else {
+       items = repository.findPaginatedItems(limit, offset);
+    }
+
     Map<String, List<Item>> groupedItems = new HashMap<>();
 
     for (Item item: items) {
@@ -67,6 +77,7 @@ public class ItemController {
   @PostMapping("/items")
   ResponseEntity<Item> newItem(@Valid @RequestBody Item newItem) {
     newItem.setTs_create(Utilities.getCurrentEpoch());
+    newItem.setCategory(newItem.getCategory().toLowerCase());
     repository.save(newItem);
     return new ResponseEntity<>(newItem, HttpStatus.OK);
   }
@@ -86,7 +97,7 @@ public class ItemController {
     return repository.findById(id)
             .map(item -> {
               item.setName(newItem.getName());
-              item.setCategory(newItem.getCategory());
+              item.setCategory(newItem.getCategory().toLowerCase());
               item.setDescription(newItem.getDescription());
               item.setPicture_url(newItem.getPicture_url());
               item.setPrice(newItem.getPrice());
@@ -97,6 +108,7 @@ public class ItemController {
             .orElseGet(() -> {
               newItem.setId(id);
               newItem.setTs_create(Utilities.getCurrentEpoch());
+              newItem.setCategory(newItem.getCategory().toLowerCase());
               repository.save(newItem);
               return new ResponseEntity<>(newItem, HttpStatus.OK);
             });

@@ -10,5 +10,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
   @Query(value = "SELECT * FROM item ORDER BY ts_create ASC LIMIT ?1 OFFSET ?2",
           nativeQuery = true)
   List<Item> findPaginatedItems(Integer limit, Integer offset);
+
+  @Query(value = "SELECT * FROM item WHERE item.category LIKE ?3% ORDER BY ts_create ASC LIMIT " +
+          "?1 " +
+          "OFFSET ?2",
+          nativeQuery = true)
+  List<Item> findPaginatedItemsWithCategory(Integer limit, Integer offset, String category);
 }
 
