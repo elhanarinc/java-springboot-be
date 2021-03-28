@@ -22,7 +22,7 @@ jobs:
           ./kill-older-container.sh
 
       - name: Run tests
-        run: sudo mvn clean test
+        run: mvn clean test
 
       - name: Docker build for the new container
         run: docker build -t java-springboot-be .
