@@ -59,17 +59,17 @@ public class ItemService {
     return formattedData;
   }
 
-  public Long saveItem(Item item) {
+  public Item saveItem(Item item) {
     item.setTs_create(Utilities.getCurrentEpoch());
     item.setCategory(item.getCategory().toLowerCase());
-    return repository.save(item).getId();
+    return repository.save(item);
   }
 
   public Optional<Item> getOneItem(Long id) {
     return repository.findById(id);
   }
 
-  public Long replaceItem(Item newItem, Long id) {
+  public Item replaceItem(Item newItem, Long id) {
     return repository.findById(id)
             .map(item -> {
               item.setName(newItem.getName());
@@ -78,18 +78,19 @@ public class ItemService {
               item.setPicture_url(newItem.getPicture_url());
               item.setPrice(newItem.getPrice());
               item.setTs_update(Utilities.getCurrentEpoch());
-              return repository.save(item).getId();
+              return repository.save(item);
             })
             .orElseGet(() -> {
               newItem.setId(id);
               newItem.setTs_create(Utilities.getCurrentEpoch());
               newItem.setCategory(newItem.getCategory().toLowerCase());
-              return repository.save(newItem).getId();
+              return repository.save(newItem);
             });
   }
 
-  public Long deleteItem(Long id) {
+  public Optional<Item> deleteItem(Long id) {
+    Optional<Item> item = repository.findById(id);
     repository.deleteById(id);
-    return id;
+    return item;
   }
 }

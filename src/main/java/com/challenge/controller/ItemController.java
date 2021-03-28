@@ -46,7 +46,7 @@ public class ItemController {
   }
 
   @GetMapping("/v1/items/{id}")
-  ResponseEntity<Item> getOneItem(@PathVariable Long id) {
+  ResponseEntity<?> getOneItem(@PathVariable Long id) {
     Optional<Item> item = itemService.getOneItem(id);
 
     if(item.isPresent()) {
@@ -56,26 +56,23 @@ public class ItemController {
   }
 
   @PostMapping("/v1/items")
-  ResponseEntity<?> newItem(@Valid @RequestBody Item newItem) {
-    Long newItemId = itemService.saveItem(newItem);
-    Map<String, String> body = new HashMap<>();
-    body.put("item_id", newItemId.toString());
-    return new ResponseEntity<>(body, HttpStatus.CREATED);
+  ResponseEntity<Item> newItem(@Valid @RequestBody Item newItem) {
+    Item item = itemService.saveItem(newItem);
+    return new ResponseEntity<>(item, HttpStatus.CREATED);
   }
 
   @PutMapping("/v1/items/{id}")
-  ResponseEntity<?> replaceItem(@Valid @RequestBody Item newItem, @PathVariable Long id) {
-    Long itemId = itemService.replaceItem(newItem, id);
-    Map<String, String> body = new HashMap<>();
-    body.put("item_id", itemId.toString());
-    return new ResponseEntity<>(body, HttpStatus.OK);
+  ResponseEntity<Item> replaceItem(@Valid @RequestBody Item newItem, @PathVariable Long id) {
+    Item item = itemService.replaceItem(newItem, id);
+    return new ResponseEntity<>(item, HttpStatus.OK);
   }
 
   @DeleteMapping("/v1/items/{id}")
   ResponseEntity<?> deleteItem(@PathVariable Long id) {
-    Long itemId = itemService.deleteItem(id);
-    Map<String, String> body = new HashMap<>();
-    body.put("item_id", itemId.toString());
-    return new ResponseEntity<>(body, HttpStatus.OK);
+    Optional<Item> item = itemService.deleteItem(id);
+    if(item.isPresent()) {
+      return new ResponseEntity<>(item.get(), HttpStatus.OK);
+    }
+    throw new RecordNotFoundException("Invalid item id : " + id);
   }
 }
