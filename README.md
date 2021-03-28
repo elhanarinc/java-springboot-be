@@ -20,18 +20,6 @@ This project assumes you had already installed these tools:
 * CI/CD: Github Actions
 ```
 
-### Database Usage
-
-You can connect the database using an ordinary mysql client. Configurations are below:
-
-```
-MYSQL_HOST = free-tier-db.cmesiok52al9.eu-west-1.rds.amazonaws.com
-MYSQL_PORT = 3306
-MYSQL_USER = admin
-MYSQL_PASSWORD = Ay3ZVQTTXW2HxR
-MYSQL_DB = item_db
-```
-
 ### API Usage
 
 You can start the API from your local computer or using docker.
