@@ -15,12 +15,6 @@ jobs:
         with:
           fetch-depth: 2
         uses: actions/checkout@v2
-
-      - name: Set up JDK 11.0.X for x64
-        uses: actions/setup-java@v1
-        with:
-          java-version: '11.0.x'
-          architecture: x64
       
       - name: Stop earlier containers 
         run: |
@@ -28,7 +22,7 @@ jobs:
           ./kill-older-container.sh
 
       - name: Run tests
-        run: mvn clean test
+        run: sudo mvn clean test
 
       - name: Docker build for the new container
         run: docker build -t java-springboot-be .
